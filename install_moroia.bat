@@ -1,8 +1,8 @@
 @echo off
-:: فحص الصلاحيات للتأكد من تشغيله كمسؤول لتثبيت بايثون بدون مشاكل
+:: Check for administrative privileges to allow smooth Python installation
 net session >nul 2>&1
 if %errorlevel% neq 0 (
-    echo [-] Please run this script as Administrator!
+    echo [-] Error: Please run this script as Administrator!
     pause
     exit /b
 )
@@ -17,7 +17,7 @@ if %errorlevel% neq 0 (
     echo [+] Python installed successfully!
 )
 
-echo [*] Installing MOROIA tool...
-pip install moroia
-echo [+] MOROIA is ready to use! Just type 'moroia'
+echo [*] Installing MOROIA tool from PyPI...
+pip install moroia --upgrade
+echo [+] MOROIA is ready to use! Just type 'moroia' in your terminal.
 pause
