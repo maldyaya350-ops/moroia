@@ -17,7 +17,7 @@ if %errorlevel% neq 0 (
     echo [+] Python installed successfully!
 )
 
-echo [*] Installing MOROIA tool from PyPI...
+echo [*] Installing/Updating MOROIA tool from PyPI...
 pip install moroia --upgrade
 echo [+] MOROIA is ready to use! Just type 'moroia' in your terminal.
 pause
