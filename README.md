@@ -1,4 +1,4 @@
-file_content = """# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 # ======================================================================================================================
 # 💎 MOROIA REVOLUTION ENGINE v4.0.0 - FULL ARCHITECTURE & DEPLOYMENT BLUEPRINT (الشرح البرمجي والتشريح الهندسي المتكامل)
 # ======================================================================================================================
@@ -40,28 +40,27 @@ BUILD_DATE = "2026-06-14"
 # مع تتابعات حاسمة مثل CLEAR_SCREEN لمسح الشاشة وإعادة تعيين الحقول، وHIDE_CURSOR لإخفاء مؤشر الكتابة الوامض أثناء البث الحي.
 
 class Colors:
-    MAIN_THEME = '\\033[38;2;200;214;224m' 
-    CYAN = '\\033[96m'
-    GREEN = '\\033[92m'
-    WARNING = '\\033[93m'
-    FAIL = '\\033[91m'
-    ENDC = '\\033[0m'
-    BOLD = '\\033[1m'
-    DIM = '\\033[2m'
-    CLEAR_SCREEN = '\\033[2J\\033[H'
-    HIDE_CURSOR = '\\033[?25l'
-    SHOW_CURSOR = '\\033[?25h'
+    MAIN_THEME = '\033[38;2;200;214;224m' 
+    CYAN = '\033[96m'
+    GREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    DIM = '\033[2m'
+    CLEAR_SCREEN = '\033[2J\033[H'
+    HIDE_CURSOR = '\033[?25l'
+    SHOW_CURSOR = '\033[?25h'
 
-# ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-# 📈 SECTION 2: METRICS & HISTORICAL QUEUES (محرك قياس الأداء والسلاسل الزمنية وتجنب تسريب الذاكرة العشوائية للنظام)
-# ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+# ## 📈 SECTION 2: METRICS & HISTORICAL QUEUES (محرك قياس الأداء والسلاسل الزمنية وتجنب تسريب الذاكرة العشوائية للنظام)
+# ---
 # في هذا الجزء نقوم بتشريح كلاس PerformanceMonitor وهو المسؤول عن تتبع السلوك الزمني والنبض الداخلي لموارد الجهاز بالملي ثانية.
 # يتم عند استدعاء دالة البناء __init__ إنشاء طوابير ثنائية النهاية deque مخصصة للذاكرة العشوائية والمعالج، مع تحديد حجم أقصى
 # ثابت لها max_history=60 لضمان الاحتفاظ بآخر دقيقة تشغيلية فقط وتجنب أي استهلاك متزايد لموارد الذاكرة (Memory Leak).
 # كما نقوم بالتقاط الطابع الزمني البدئي عبر دالة time.time() لتحديد نقطة انطلاق المحرك الحية. تحتوي الدالة التشغيلية update
 # على فحص ذكي للـ psutil؛ فإذا كانت متوفرة، تقوم الأداة بسحب نسب الاستهلاك الحالية بدون إيقاف خيط المعالجة الرئيسي وحقنها.
 # أما دالة get_uptime_string فتقوم بعملية حسابية رياضية بحتة، حيث تطرح وقت البدء من الوقت الحالي لإنتاج الفارق الإجمالي،
-# ثم تقسم الفائض برمجياً عبر لغاريتمات الحساب القياسي لمعرفة عدد الساعات، الدقائق، والثواني المنقضية بدقة تامة وبدون أي تذبذب.
+# ثم تقسم الفائض برمجياً عبر لغاريتمات الحساب القياسي لمعرفة عدد الساعات, الدقائق، والثواني المنقضية بدقة تامة وبدون أي تذبذب.
 
 class PerformanceMonitor:
     def __init__(self, max_history=60):
@@ -81,9 +80,8 @@ class PerformanceMonitor:
         seconds = uptime % 60
         return f"{hours:02d}:{minutes:02d}:{seconds:02d}"
 
-# ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-# ⚙️ SECTION 3: CORE LOGIC INITIALIZATION & LOCALIZATION (نواة المحرك وإدارة التوطين والترجمة والملفات الخفية)
-# ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+# ## ⚙️ SECTION 3: CORE LOGIC INITIALIZATION & LOCALIZATION (نواة المحرك وإدارة التوطين والترجمة والملفات الخفية)
+# ---
 # هنا نصل إلى قلب المحرك النابض كلاس MoroiaEngine. في دالة البناء، نقوم بربط محرك مراقبة الأداء وتأسيس مجلد الكاش الخفي،
 # حيث يتم البحث عن بيئة APPDATA على أنظمة ويندوز أو المجلد الرئيسي للمستخدم ~ على أنظمة لينكس ويونكس لإنشاء مجلد خفي
 # باسم .moroia يحتوي على ملفات كاش التحديث update_cache.json وملف الإعدادات الأساسي config.json بشكل آمن ومنعزل تماماً.
@@ -130,9 +128,8 @@ class MoroiaEngine:
         except:
             self._ = lambda s: s
 
-# ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-# 🚨 SECTION 4: ANTI-STALE VERSION ENFORCEMENT (منظومة فحص التحديثات الإجبارية الصارمة وحظر الإصدارات القديمة)
-# ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+# ## 🚨 SECTION 4: ANTI-STALE VERSION ENFORCEMENT (منظومة فحص التحديثات الإجبارية الصارمة وحظر الإصدارات القديمة)
+# ---
 # في دالة check_for_updates نطبق استراتيجية صارمة لمنع استخدام أي إصدارات قديمة ومخترقة للأداة ولضمان تزامن المطورين.
 # تقوم الدالة بجلب الوقت الحالي والمقارنة مع آخر طابع زمني تم تسجيله في ملف الكاش الخفي؛ فإذا تبين أن الفارق الزمني أقل
 # من 10 دقائق كاملة، يتم تجاوز الفحص فوراً لتقليل استهلاك موارد الشبكة وتفادي حظر الـ IP من قِبل خوادم الهيئة الرسمية.
@@ -167,16 +164,15 @@ class MoroiaEngine:
                     os.system('cls' if os.name == 'nt' else 'clear')
                     print(f"{Colors.CLEAR_SCREEN}{Colors.SHOW_CURSOR}")
                     print(f"{Colors.FAIL}{Colors.BOLD}🚨 UPDATE REQUIRED / تحديث مطلوب 🚨{Colors.ENDC}")
-                    print(f"{Colors.WARNING}New Version available: v{latest} (Current: v{VERSION}){Colors.ENDC}\\n")
+                    print(f"{Colors.WARNING}New Version available: v{latest} (Current: v{VERSION}){Colors.ENDC}\n")
                     print(f"{Colors.BOLD}👉 Run command to update / نفّذ الأمر للتحديث:{Colors.ENDC}")
-                    print(f"{Colors.GREEN}{Colors.BOLD}   pip install --upgrade moroia --no-cache-dir{Colors.ENDC}\\n")
+                    print(f"{Colors.GREEN}{Colors.BOLD}   pip install --upgrade moroia --no-cache-dir{Colors.ENDC}\n")
                     sys.exit(0)
             except: pass
 
-# ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-# 💻 SECTION 5: HARDWARE AGGREGATION & GPU DETECTOR (منظومة استخراج بيانات العتاد والعمليات والـ GPU منخفضة المستوى)
-# ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-# تعتبر دالة get_hardware_status بمثابة مركز الاستخبارات الداخلي للعتاد. تبدأ بالتحقق من وجود مكتبة psutil فإن غابت ترجع خطأ.
+# ## 💻 SECTION 5: HARDWARE AGGREGATION & GPU DETECTOR (منظومة استخراج بيانات العتاد والعمليات والـ GPU منخفضة المستوى)
+# ---
+# تعتبر دالة get_hardware_status بمثابة micro-intelligence للعتاد. تبدأ بالتحقق من وجود مكتبة psutil فإن غابت ترجع خطأ.
 # نقوم بسحب استهلاك المعالج الفوري بدون إحداث أي بطء في التدفق الحركي عبر تمرير معامل الأمان القياسي interval=None.
 # بعد ذلك نأخذ لقطة سريعة للذاكرة العشوائية ومساحة القرص الصلب الرئيسي المتمثل في الجذر /. لحساب واكتشاف أكثر البرامج استهلاكاً
 # للذاكرة (Heavy Apps)، نقوم بفتح حلقة تكرارية مرنة تمر على جميع العمليات النشطة في نظام التشغيل وتسحب منها اسم العملية،
@@ -211,7 +207,7 @@ class MoroiaEngine:
         try:
             if platform.system() == "Windows":
                 cmd = "wmic path win32_VideoController get name"
-                gpu_out = subprocess.check_output(cmd, shell=True, text=True, timeout=2).split('\\n')
+                gpu_out = subprocess.check_output(cmd, shell=True, text=True, timeout=2).split('\n')
                 if len(gpu_out) > 1 and gpu_out[1].strip(): gpu_name = gpu_out[1].strip()[:25]
         except: pass
         
@@ -226,9 +222,8 @@ class MoroiaEngine:
             "heavy_apps": heavy_apps if heavy_apps else ["None"]
         }
 
-# ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-# 🛡️ SECTION 6: SPY HUNTER SECURITY AUDIT & NET-SCOUT (منظومة تتبع الاتصالات الخبيثة الحية وجلب عناوين الـ IP السريعة)
-# ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+# ## 🛡️ SECTION 6: SPY HUNTER SECURITY AUDIT & NET-SCOUT (منظومة تتبع الاتصالات الخبيثة الحية وجلب عناوين الـ IP السريعة)
+# ---
 # تعتبر منظومة الـ spy_hunter_scan الذراع الأمني للأداة. تقوم الدالة بفحص جميع المقابس والاتصالات الشبكية المفتوحة حالياً
 # في الخلفية باستخدام نظام البحث عالي الكفاءة psutil.net_connections مع تصفية نوع المقابس إلى inet (أي اتصالات الإنترنت فقط).
 # تمر الدالة عبر جميع الاتصالات المفتوحة وتبحث بدقة عن الحالات المستقرة والنشطة التي تحمل الحالة السيادية ESTABLISHED والتي تمتلك
@@ -270,9 +265,8 @@ class MoroiaEngine:
         except: pass
         return {"local": local_ip, "public": public_ip}
 
-# ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-# 🧹 SECTION 7: TURBO DISK PURGER & PIP CACHE REVIVER (منظومة تنظيف الذاكرة ومخلفات المطورين وحساب الأوتوبايلوت بالأحجام)
-# ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+# ## 🧹 SECTION 7: TURBO DISK PURGER & PIP CACHE REVIVER (منظومة تنظيف الذاكرة ومخلفات المطورين وحساب الأوتوبايلوت بالأحجام)
+# ---
 # هنا نكشف عن آليات الصيانة العميقة للأداة من خلال دوال التنظيف الحقيقية وحساب الأحجام بالبايت. دالة clear_temp_files تستهدف مسارات
 # الملفات المؤقتة المتراكمة في بيئة نظام تشغيل ويندوز عبر البحث في متغير البيئة TEMP ومجلد النظام الرئيسي بشكل مباشر؛ تقوم الدالة
 # بالدخول وفحص كل ملف، وإذا تم تفعيل الـ safe_mode يتم استبعاد الملفات النشطة لحماية البرامج الحالية من الانهيار، بينما يتم حساب الحجم
@@ -283,7 +277,7 @@ class MoroiaEngine:
     @staticmethod
     def clear_temp_files(safe_mode: bool = True) -> int:
         if platform.system() != 'Windows': return 0
-        temp_paths = [os.environ.get('TEMP', ''), os.path.join(os.environ.get('SystemRoot', 'C:\\\\Windows'), 'Temp')]
+        temp_paths = [os.environ.get('TEMP', ''), os.path.join(os.environ.get('SystemRoot', 'C:\\Windows'), 'Temp')]
         freed_bytes = 0
         for path in temp_paths:
             if not path or not os.path.exists(path): continue
@@ -300,7 +294,7 @@ class MoroiaEngine:
     @staticmethod
     def clear_developer_cache() -> int:
         freed_bytes = 0
-        path = os.path.expanduser(r"~\\AppData\\Local\\pip\\cache") if platform.system() == 'Windows' else os.path.expanduser("~/.cache/pip")
+        path = os.path.expanduser(r"~\AppData\Local\pip\cache") if platform.system() == 'Windows' else os.path.expanduser("~/.cache/pip")
         if os.path.exists(path):
             try:
                 for root, dirs, files in os.walk(path):
@@ -311,9 +305,8 @@ class MoroiaEngine:
             except: pass
         return freed_bytes
 
-# ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-# 🎨 SECTION 8: MATHEMATICAL GRID DRAWING & ANTI-FLICKER DASHBOARD (نظام الرسم الهندسي والشبكة المقاومة للوميض والرمشة)
-# ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+# ## 🎨 SECTION 8: MATHEMATICAL GRID DRAWING & ANTI-FLICKER DASHBOARD (نظام الرسم الهندسي والشبكة المقاومة للوميض والرمشة)
+# ---
 # تتحكم دالة make_bar رياضياً في طريقة رسم أشرطة استهلاك الموارد الأنيقة؛ فهي تأخذ النسبة المئوية الممررة وتقوم بحساب طردي لتحديد
 # عدد المربعات المصمتة █ والمربعات الباهتة ░ بناءً على طول ثابت وصارم هو 20 حيزاً نصياً فقط لضمان عدم حدوث أي تمدد أو تشوه في الشبكة.
 # بعد ذلك، دالة print_clean_dashboard تقوم ببناء لوحة التحكم الفائقة النقاء الشبكي؛ حيث ترسم الحدود الصارمة بدقة خطية باستخدام
@@ -341,15 +334,15 @@ def print_clean_dashboard(hw, network, spy, uptime_str, time_left, _):
     cpu_bar = make_bar(cpu_pct, cpu_color)
     ram_bar = make_bar(ram_pct, ram_color)
     print(f" {Colors.MAIN_THEME}│{Colors.ENDC} {Colors.BOLD}💻 CPU LOAD:{Colors.ENDC} {cpu_color}{cpu_pct:4.1f}%{Colors.ENDC}         {Colors.MAIN_THEME}│{Colors.ENDC} {Colors.BOLD}🧠 RAM USAGE:{Colors.ENDC} {ram_color}{ram_pct:4.1f}%{Colors.ENDC}        {Colors.MAIN_THEME}│{Colors.ENDC}")
-    print(f" {Colors.MAIN_THEME}│{Colors.ENDC} {cpu_bar}  {Colors.MAIN_THEME}│{Colors.ENDC} {ram_bar}   {Colors.MAIN_THEME}│{Colors.ENDC}")
+    print(f" {Colors.MAIN_THEME}│{Colors.ENDC} {cpu_bar}  {Colors.MAIN_THEME}│{Colors.ENDC} {ram_bar}    {Colors.MAIN_THEME}│{Colors.ENDC}")
     print(f" {Colors.MAIN_THEME}│{Colors.ENDC} GPU: {hw['gpu']:<24} {Colors.MAIN_THEME}│{Colors.ENDC} RAM Status: {hw['ram_used_gb']}/{hw['ram_total_gb']} GB      {Colors.MAIN_THEME}│{Colors.ENDC}")
     
     print(f" {Colors.MAIN_THEME}├──────────────────────────────┴───────────────────────────────┤{Colors.ENDC}")
     
     apps_str = ", ".join(hw['heavy_apps'])
-    print(f" {Colors.MAIN_THEME}│{Colors.ENDC} 💿 {_('Disk Storage')}: {hw['disk_free_gb']} GB free / {hw['disk_total_gb']} GB Total                 {Colors.MAIN_THEME}│{Colors.ENDC}")
+    print(f" {Colors.MAIN_THEME}│{Colors.ENDC} 💿 {_('Disk Storage')}: {hw['disk_free_gb']} GB free / {hw['disk_total_gb']} GB Total                  {Colors.MAIN_THEME}│{Colors.ENDC}")
     print(f" {Colors.MAIN_THEME}│{Colors.ENDC} 🔥 {_('Top Apps Open')}: {Colors.WARNING}{apps_str[:40]:<45}{Colors.ENDC} {Colors.MAIN_THEME}│{Colors.ENDC}")
-    print(f" {Colors.MAIN_THEME}│{Colors.ENDC} 🌐 {_('Network Local/Public')}: {Colors.CYAN}{network['local']}{Colors.ENDC} / {Colors.CYAN}{network['public']}{Colors.ENDC}             {Colors.MAIN_THEME}│{Colors.ENDC}")
+    print(f" {Colors.MAIN_THEME}│{Colors.ENDC} 🌐 {_('Network Local/Public')}: {Colors.CYAN}{network['local']}{Colors.ENDC} / {Colors.CYAN}{network['public']}{Colors.ENDC}              {Colors.MAIN_THEME}│{Colors.ENDC}")
     
     spy_status = f"{Colors.GREEN}SECURE (0){Colors.ENDC}" if not spy else f"{Colors.FAIL}ALERT ({len(spy)}){Colors.ENDC}"
     print(f" {Colors.MAIN_THEME}│{Colors.ENDC} 🛡️  {_('Spy Hunter Network Audit')}: {spy_status:<46} {Colors.MAIN_THEME}│{Colors.ENDC}")
@@ -358,11 +351,10 @@ def print_clean_dashboard(hw, network, spy, uptime_str, time_left, _):
             print(f" {Colors.MAIN_THEME}│{Colors.ENDC}    ↳ [SUSPICIOUS CONNECTION] -> Process: {Colors.FAIL}{s['process']}{Colors.ENDC} Remote: {Colors.WARNING}{s['remote']}{Colors.ENDC} {Colors.MAIN_THEME}│{Colors.ENDC}")
             
     print(f" {Colors.MAIN_THEME}└──────────────────────────────────────────────────────────────┘{Colors.ENDC}")
-    print(f"\\n   {Colors.WARNING}💡 {_('Press Ctrl+C to open optimization & autopilot menu')}{Colors.ENDC}")
+    print(f"\n   {Colors.WARNING}💡 {_('Press Ctrl+C to open optimization & autopilot menu')}{Colors.ENDC}")
 
-# ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-# 💎 SECTION 9: REVOLUTION BANNER & APPLICATION ENTRY POINT (شعار الثورة البرمجية ونقطة الانطلاق الحية واعتبارات التحكم)
-# ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+# ## 💎 SECTION 9: REVOLUTION BANNER & APPLICATION ENTRY POINT (شعار الثورة البرمجية ونقطة الانطلاق الحية واعتبارات التحكم)
+# ---
 # نقوم برسم الشعار النصي الفخم للأداة ليعبر عن روح القوة الجبارة للإصدار الرابع عبر دالة print_banner المصبوغة بالكامل بالثيم الموحد لمالك.
 # نأتي الآن للدالة الحركية والقلب التنفيذي الشامل main. تبدأ فوراً بحقن أمر التصفية والمسح الأولي وإخفاء المؤشر تماماً لتجهيز الكونسول للبث الحي؛
 # ثم تستدعي دالة فحص الآي بي لمرة واحدة فقط وتخزن مخرجاتها في الذاكرة لتجنب استعلامها المتكرر داخل الحلقة الذي يسبب تجمد الواجهة ثانية تلو الأخرى.
@@ -372,16 +364,16 @@ def print_clean_dashboard(hw, network, spy, uptime_str, time_left, _):
 # والتي تتيح للمستخدم إما إجراء تنظيف تيربو ذكي وفوري مع حساب المساحة المستردة الفعالة بالميجابايت بدقة متناهية، أو تبديل لغة الواجهة فوراً.
 
 def print_banner():
-    print(f\"\"\"
+    print(f"""
 {Colors.CYAN}  ============================================================= {Colors.ENDC}
-{Colors.BOLD}{Colors.MAIN_THEME}     __  __  ____  _____   ____  _____  _      /\\  
-     |  \\/  |/ __ \\|  __ \\ / __ \\|_   _|| |    /  \\ 
-     | \\  / | |  | | |__) | |  | | | |  | |   /    \\ 
-     | |\\/| | |  | |  _  /| |  | | | |  | |  /  /\\  \\ 
-     | |  | | |__| | | \\ \\| |__| |_| |_ | |_/ ____  \\ 
-     |_|  |_|\\____/|_|  \\_\\____/|_____||_/_/    \\_\\ {Colors.ENDC}
-{Colors.BOLD}{Colors.CYAN}              💎 MOROIA REVOLUTION ENGINE v{VERSION} 💎          {Colors.ENDC}
-{Colors.CYAN}  ============================================================= {Colors.ENDC}\"\"\")
+{Colors.BOLD}{Colors.MAIN_THEME}     __  __  ____  _____   ____  _____  _      /\  
+     |  \/  |/ __ \|  __ \ / __ \|_    _|| |    /  \ 
+     | \  / | |  | | |__) | |  | | | |  | |   /    \ 
+     | |\/| | |  | |  _  /| |  | | | |  | |  /  /\  \ 
+     | |  | | |__| | | \ \| |__| |_| |_ | |_/ ____  \ 
+     |_|  |_|\____/|_|  \_\____/|_____||_/_/    \_\ {Colors.ENDC}
+{Colors.BOLD}{Colors.CYAN}               💎 MOROIA REVOLUTION ENGINE v{VERSION} 💎          {Colors.ENDC}
+{Colors.CYAN}  ============================================================= {Colors.ENDC}""")
 
 def main():
     engine = MoroiaEngine()
@@ -398,7 +390,7 @@ def main():
             uptime_str = engine.monitor.get_uptime_string()
             engine.monitor.update()
             
-            print("\\033[H", end="")
+            print("\033[H", end="")
             print_banner()
             print_clean_dashboard(hw, network_data, spy_data, uptime_str, 0, _)
             
@@ -408,16 +400,16 @@ def main():
         print(f"{Colors.SHOW_CURSOR}{Colors.CLEAR_SCREEN}")
         print_banner()
         
-        print(f"\\n {Colors.BOLD}{Colors.CYAN}⚡ AUTOPILOT PERFORMANCE MENU{Colors.ENDC}")
+        print(f"\n {Colors.BOLD}{Colors.CYAN}⚡ AUTOPILOT PERFORMANCE MENU{Colors.ENDC}")
         print(" ──────────────────────────────────────────────────────────────")
         print(f"  [1] {_('Run Full Smart Turbo Clean (Temp & Pip Caches)')}")
         print(f"  [2] {_('Toggle Interface Language (English / العربية)')}")
         print(f"  [3] {_('Exit Engine')}")
         
         try:
-            choice = input(f"\\n {Colors.BOLD}{_('Enter Action (1-3): ')}{Colors.ENDC}").strip()
+            choice = input(f"\n {Colors.BOLD}{_('Enter Action (1-3): ')}{Colors.ENDC}").strip()
             if choice == '1':
-                print(f"\\n {Colors.CYAN}⏳ Analyzing system and flushing dump caches...{Colors.ENDC}")
+                print(f"\n {Colors.CYAN}⏳ Analyzing system and flushing dump caches...{Colors.ENDC}")
                 b_temp = MoroiaEngine.clear_temp_files(safe_mode=False)
                 b_pip = MoroiaEngine.clear_developer_cache()
                 total_mb = round((b_temp + b_pip) / (1024**2), 2)
@@ -429,7 +421,7 @@ def main():
             elif choice == '3':
                 sys.exit(0)
                 
-            print(f"\\n {Colors.MAIN_THEME}{_('Press Enter to finish...')}{Colors.ENDC}")
+            print(f"\n {Colors.MAIN_THEME}{_('Press Enter to finish...')}{Colors.ENDC}")
             input()
         except: pass
     finally:
@@ -438,9 +430,8 @@ def main():
 if __name__ == '__main__':
     main()
 
-# ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-# 🚀 SECTION 10: SECURE PIP DEPLOYMENT WORKFLOW (خريطة النشر والرفع والانتشار الرسمي الآمن على PyPI والـ PowerShell خطوة بخطوة)
-# ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+# ## 🚀 SECTION 10: SECURE PIP DEPLOYMENT WORKFLOW (خريطة النشر والرفع والانتشار الرسمي الآمن على PyPI والـ PowerShell خطوة بخطوة)
+# ---
 # لكي تضمن نشر الأداة للعامة والمجتمع البرمجي المفتوح على PyPI بشكل احترافي خالٍ تماماً من الملفات الميتة أو تداخل مخلفات الإصدارات
 # السابقة، يتعين عليك تنظيم مجلد المشروع بهندسة معيارية صارمة تحتوي على ملفات الإعداد الفعالة وهي setup.py و pyproject.toml مع ضبط
 # نقطة الدخول الرئيسية لتربط كلمة أمر التشغيل moroia مباشرة باستدعاء الدالة التنفيذية main الموجودة بداخل الملف النقي للمشروع.
@@ -449,9 +440,8 @@ if __name__ == '__main__':
 # ثم يستدعي فوراً وحدة التجميع الرسمية لبايثون لإنشاء حزم الـ Wheel والـ Source Tarball بشكل مضغوط ومثالي للإصدار الراديكالي الجديد.
 # Command: Remove-Item -Recurse -Force dist, build, *.egg-info -ErrorAction SilentlyContinue; python -m build; python -m twine upload --username __token__ dist/*
 
-# ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-# 🧪 SECTION 11: FULL DECOUPLED TESTING PROTOCOL (بروتوكول الفحص النظيف والتجربة الحية المعزولة وإلغاء الكاش المحلي)
-# ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+# ## 🧪 SECTION 11: FULL DECOUPLED TESTING PROTOCOL (بروتوكول الفحص النظيف والتجربة الحية المعزولة وإلغاء الكاش المحلي)
+# ---
 # لضمان فحص الأداة بعد النشر والتأكد من تفعيل جميع آليات الحماية والتحديث الإجباري والواجهة الرسومية الثابتة والجديدة، يجب تفادي فخاخ
 # كاش نظام التشغيل المحلي الذي يدمج حزم الـ wheels القديمة من الذاكرة المحلية للجهاز. يتم تفعيل البروتوكول الاختباري الصارم عبر ثلاثة
 # أوامر متتالية تضمن العزل الكامل؛ حيث يقوم الأمر الأول بحذف أي بقايا أو مخلفات برمجية قديمة للأداة من بيئة بايثون بشكل صامت، تتبعه دالة
@@ -462,11 +452,5 @@ if __name__ == '__main__':
 # Command 3: pip install moroia==4.0.0 --no-cache-dir
 # Command 4: moroia
 # ======================================================================================================================
-#                                    🔥 END OF BLUEPRINT | ARCHITECTURE VERIFIED 🔥
+#                                         🔥 END OF BLUEPRINT | ARCHITECTURE VERIFIED 🔥
 # ======================================================================================================================
-"""
-
-with open("moroia_core.py", "w", encoding="utf-8") as f:
-    f.write(file_content)
-
-print("✅ تم إنشاء ملف 'moroia_core.py' بنجاح! يحتوي على الكود بالكامل مع الشرح والخطوات مدمجة كتعليقات برمجية خطية.")
